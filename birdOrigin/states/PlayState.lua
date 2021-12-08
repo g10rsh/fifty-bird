@@ -13,13 +13,11 @@ function PlayState:init()
   self.timer=0
   self.spawnPipe=2
   self.score=0
-  self.pause=false
 
   self.lastY=-PIPE_HEIGHT-math.random(80)+20
 end
 
 function PlayState:update(dt)
-  if not self.pause then
     self.timer=self.timer+dt
     if self.timer>self.spawnPipe then
       local y = math.max(-PIPE_HEIGHT+10,math.min(self.lastY+math.random(-40, 40),VIRTUAL_HEIGHT-90-PIPE_HEIGHT))
@@ -58,10 +56,6 @@ function PlayState:update(dt)
         score=self.score
       })
     end
-  end
-  if love.keyboard.wasPressed('p') then
-    self.pause=not self.pause
-  end
 end
 
 function PlayState:render()

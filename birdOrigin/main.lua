@@ -16,6 +16,7 @@ WINDOW_WIDTH=1280
 WINDOW_HEIGHT=720
 VIRTUAL_WIDTH = 512
 VIRTUAL_HEIGHT=288
+local pause=false
 
 local background = love.graphics.newImage("background.png")
 local backgroundScroll =0
@@ -72,11 +73,15 @@ function love.keyboard.wasPressed(key)
 end
 
 function love.update(dt)
+  if not pause then
     backgroundScroll=(backgroundScroll+BACKGROUND_SCROLL_SPEED*dt)%BACKGROUND_LOOPING_POINT
     groundScroll=(groundScroll+GROUND_SCROLL_SPEED*dt)%GROUND_LOOPING_POINT
 
     gStateMachine:update(dt)
-
+  end
+  if love.keyboard.wasPressed('p')then
+    pause=not pause
+  end
   love.keyboard.keysPressed={}
 end
 
@@ -85,5 +90,9 @@ function love.draw()
   love.graphics.draw(background,-backgroundScroll,0)
   gStateMachine:render()
   love.graphics.draw(ground, -groundScroll,VIRTUAL_HEIGHT-16)
+  if pause then
+    love.graphics.setFont(flappyFont)
+    love.graphics.printf('PAUSED', 0, 64, VIRTUAL_WIDTH, 'center')
+  end
   push:finish()
 end
